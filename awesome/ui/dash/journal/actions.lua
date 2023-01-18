@@ -9,7 +9,7 @@ local journal = require("core.system.journal")
 local dash = require("core.cozy.dash")
 local simplebtn = require("helpers.ui").simple_button
 local keynav = require("modules.keynav")
-local navbtn = keynav.navitem.simplebutton
+local navbtn = keynav.navitem.SimpleButton
 
 local function create_button(text)
   local btn = simplebtn({

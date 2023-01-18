@@ -37,7 +37,7 @@ local container = box(widget, nil, nil, beautiful.dash_widget_bg)
 
 local nav_tags = keynav.area({
   name   = "nav_tags",
-  widget = keynav.navitem.background({ widget = container.children[1] }),
+  widget = keynav.navitem.Background({ widget = container.children[1] }),
 })
 
 local function create_tag_item(tag)

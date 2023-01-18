@@ -73,7 +73,7 @@ journal:connect_signal("ready::tags", function()
   end
 end)
 
-nav_tags.widget = keynav.navitem.background({ widget = container.children[1] })
+nav_tags.widget = keynav.navitem.Background({ widget = container.children[1] })
 
 return function()
   return container, nav_tags

@@ -101,7 +101,7 @@ journal:connect_signal("ready::entries", function(_, tag)
   ui_header:update(tag)
 end)
 
-nav_entrylist.widget = keynav.navitem.background({ widget = ui_entrylist_container.children[1] })
+nav_entrylist.widget = keynav.navitem.Background({ widget = ui_entrylist_container.children[1] })
 
 return function()
   return ui_entrylist_container, nav_entrylist

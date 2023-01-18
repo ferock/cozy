@@ -35,7 +35,7 @@ local container = box(projects_widget, nil, nil, beautiful.dash_widget_bg)
 
 local nav_projects = keynav.area({
   name   = "projects",
-  widget = keynav.navitem.background({ widget = container.children[1] }),
+  widget = keynav.navitem.Background({ widget = container.children[1] }),
   hl_persist_on_area_switch = true,
 })
 
