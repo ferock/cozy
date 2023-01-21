@@ -50,10 +50,13 @@ local function create_tag_item(tag)
     forced_height = dpi(20),
   })
 
-  local nav_tag = keynav.navitem.textbox({ widget = tag_wibox })
-  function nav_tag:release()
-    task:emit_signal("selected::tag", tag)
-  end
+  local nav_tag = keynav.navitem.textbox({
+    widget  = tag_wibox,
+    label   = tag,
+    release = function()
+      task:emit_signal("selected::tag", tag)
+    end
+  })
 
   return tag_wibox, nav_tag
 end
@@ -68,6 +71,8 @@ task:connect_signal("taglist::update", function()
     nav_tags:add(nav_tag)
   end
 end)
+
+
 
 return function()
   return container, nav_tags

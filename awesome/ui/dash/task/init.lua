@@ -12,11 +12,12 @@ local task = require("core.system.task")
 local keynav = require("modules.keynav")
 local ui = require("helpers.ui")
 
-local tag_list, nav_tags = require(... .. ".tags")()
-local project_list, nav_projects = require(... .. ".projects")()
-local tasklist, nav_tasklist = require(... .. ".tasklist")()
-local header = require(... .. ".header")
-local prompt = require(... .. ".prompt")
+local tag_list, nav_tags      = require(... .. ".tags")()
+local projects, nav_projects  = require(... .. ".projects")()
+local tasklist, nav_tasklist  = require(... .. ".tasklist.tasks")()
+local header  = require(... .. ".header")
+local prompt  = require(... .. ".prompt")
+local unpack = table.unpack
 
 local nav_tasks = keynav.area({
   name = "tasks",
@@ -24,6 +25,10 @@ local nav_tasks = keynav.area({
     nav_tags,
     nav_projects,
     nav_tasklist,
+  },
+  keys = {
+    ["z"] = function() task:emit_signal("details::toggle") end,
+    ["W"] = function() task:emit_signal("toggle_show_waiting") end,
   },
 })
 
@@ -76,6 +81,7 @@ local tasks_dashboard = wibox.widget({
     {
       {
         main_contents,
+        details,
         prompt,
         layout = wibox.layout.fixed.vertical,
       },
