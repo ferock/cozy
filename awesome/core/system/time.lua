@@ -67,7 +67,7 @@ end
 -- Call timew export to fetch data for this month and store data in table.
 -- @param month   Full name of month as lowercase string
 function time:parse_month_data(month)
-  month = month or string.lower(tostring(os.date("%B")))
+  month = month or "$(LANG=en_us_88591;date +%B|tr '[:upper:]' '[:lower:]')"
 
   local cmd = "timew export " .. month
   awful.spawn.easy_async_with_shell(cmd, function(stdout)
