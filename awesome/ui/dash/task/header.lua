@@ -50,11 +50,10 @@ local progress_bar = wibox.widget({
   widget = wibox.widget.progressbar,
 })
 
--- Progress bar animations
 -- local progress_bar_animation = animation:new({
 --   duration = 1,
---   value = 0,
---   easing = animation.easing.inOutExpo,
+--   value    = 0,
+--   easing   = animation.easing.inOutExpo,
 --   reset_on_stop = true,
 --   update = function(self, pos)
 --     progress_bar.value = dpi(pos)
@@ -83,7 +82,7 @@ local tasklist_header = wibox.widget({
 -- █▄▄ ▄▀█ █▀▀ █▄▀ █▀▀ █▄░█ █▀▄ 
 -- █▄█ █▀█ █▄▄ █░█ ██▄ █░▀█ █▄▀ 
 
-local function update_header(tag, project)
+task:connect_signal("header::update", function(_, tag, project)
   local accent = task:get_accent(tag, project)
   if not accent then
     accent = beautiful.random_accent_color()
@@ -99,25 +98,26 @@ local function update_header(tag, project)
   name:set_markup_silently(colorize(name_text, accent))
 
   -- Completion statistics text
-  local pending = #task:get_pending_tasks(nil, project)
-  local total   = task:get_total_tasks(tag, project)
+  local pending = #task.tags[tag].projects[project].tasks
+  local total   = task.tags[tag].projects[project].total
   local rem     = pending.."/"..total.." REMAINING"
   local text    = string.upper(tag).." - "..rem
+  if task.show_waiting then
+    text = text .. " (WAIT SHOWN)"
+  else
+    text = text .. " (WAIT HIDDEN)"
+  end
   local markup  = colorize(text, beautiful.fg)
   subheader:set_markup_silently(markup)
 
   -- Progress bar
-  local percent = task:get_proj_completion_percentage(tag, project)
+  local percent = task:calc_completion_percentage(tag, project)
   progress_bar.value = percent
   progress_bar.color = accent
 
   -- Completion percentage
   markup = colorize(percent.."%", beautiful.fg)
   percent_completion:set_markup_silently(markup)
-end
-
-task:connect_signal("header::update", function(_, tag, project)
-  update_header(tag, project)
 end)
 
 return tasklist_header

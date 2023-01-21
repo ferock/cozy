@@ -1,36 +1,30 @@
 -- ▄▀█ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀ 
 -- █▀█ █▄▄ ░█░ █ █▄█ █░▀█ ▄█ 
 
--- Buttons for opening and reloading Ledger content.
-
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
-local box = require("helpers.ui").create_boxed_widget
 local journal = require("core.system.journal")
 local dash = require("core.cozy.dash")
-local gears = require("gears")
-local colorize = require("helpers.ui").colorize_text
-local area = require("modules.keynav.area")
-local navbg = require("modules.keynav.navitem").Background
+local simplebtn = require("helpers.ui").simple_button
+local keynav = require("modules.keynav")
+local navbtn = keynav.navitem.simplebutton
 
 local function create_button(text)
-  local btn = wibox.widget({
-    {
-      markup = colorize(text, beautiful.fg),
-      font   = beautiful.base_small_font,
-      align  = "center",
-      valign = "center",
-      widget = wibox.widget.textbox,
-    },
-    forced_height = dpi(50),
-    shape  = gears.shape.rounded_rect,
-    bg     = beautiful.cash_action_btn,
-    widget = wibox.container.background,
+  local btn = simplebtn({
+    text = text,
+    font = beautiful.base_small_font,
+    bg   = beautiful.cash_action_btn,
+    margins = {
+      left   = dpi(15),
+      right  = dpi(15),
+      top    = dpi(10),
+      bottom = dpi(10),
+    }
   })
 
-  local nav_btn = navbg({
+  local nav_btn = navbtn({
     widget = btn,
     bg_off = beautiful.cash_action_btn,
   })
@@ -38,7 +32,7 @@ local function create_button(text)
   return btn, nav_btn
 end
 
-local open_btn, nav_open = create_button("Open ledger")
+local open_btn, nav_open = create_button("New entry")
 function nav_open:release()
   dash:close()
   journal:new_entry()
@@ -49,7 +43,7 @@ function nav_reload:release()
   journal:reload()
 end
 
-local nav_actions = area:new({
+local nav_actions = keynav.area:new({
   name = "nav_actions",
   circular = true,
   children = {
@@ -68,10 +62,7 @@ local actions = wibox.widget({
   widget = wibox.container.place,
 })
 
-local container = box(actions, dpi(0), dpi(80), beautiful.dash_widget_bg)
-nav_actions.widget = navbg({ widget = container })
-
 return function()
-  return container, nav_actions
+  return actions, nav_actions
 end
 
